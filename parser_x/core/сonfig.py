@@ -1,3 +1,4 @@
+from pathlib import Path
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -8,10 +9,12 @@ class DataBaseConfig(BaseModel):
     port: int
     user: str
     password: str
-    
-    
+
+
 class SpimexConfig(BaseModel):
-    url: str
+    results_url: str
+    upload_url: str
+    path_to_folder: Path
 
 
 class Config(BaseSettings):
