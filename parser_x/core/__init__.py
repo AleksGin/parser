@@ -2,4 +2,4 @@ __all__ = (
     "settings",
 )
 
-from core.сonfig import settings
+from .сonfig import settings
