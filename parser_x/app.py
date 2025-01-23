@@ -39,18 +39,15 @@ async def main():
             path_to_folder=Path(settings.SPX_Config.path_to_folder),
         )
         print("ReadAndWrite сервис инициализирован ✅")
-        await asyncio.sleep(3)
 
         files_to_download = await spimex_repo.get_latest_results()
         print("Самый свежий файл скачен ✅")
-        await asyncio.sleep(3)
 
         for file in files_to_download:
             await download_service.download_file(file)
 
         data = read_and_write_service.get_data_from_excel_file()
         print(f"Обработано записей: {len(data)} ✅")
-        await asyncio.sleep(3)
 
         if data:
             print("Данные направлены✅")
