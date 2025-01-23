@@ -4,4 +4,4 @@ __all__ = (
 )
 
 from .base import Base
-from .models import SpimexTraidingResut
+from .spx_model import SpimexTraidingResut
