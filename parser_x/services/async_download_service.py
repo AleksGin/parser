@@ -1,11 +1,10 @@
 import asyncio
 from pathlib import Path
-import time
 from typing import List
 from urllib.parse import urlparse
-from aiohttp import ClientSession
-import aiofiles
 
+import aiofiles
+from aiohttp import ClientSession
 
 
 class DownloadService:
@@ -39,11 +38,8 @@ class DownloadService:
             print(f"Ошибка при скачивании: {e}")
 
     async def download_some_files(self, items: List[str]) -> None:
-            try:
-                start = time.time()
-                tasks = [self.download_file(item) for item in items]
-                await asyncio.gather(*tasks)
-                end = time.time()
-                print(f"Асинхронное скачивание завершилось за {end - start} секунд")
-            except Exception as e:
-                print(f"Ошибка при скачивании: {e}")
+        try:
+            tasks = [self.download_file(item) for item in items]
+            await asyncio.gather(*tasks)
+        except Exception as e:
+            print(f"Ошибка при скачивании: {e}")
