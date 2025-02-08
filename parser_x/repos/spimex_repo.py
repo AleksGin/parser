@@ -21,7 +21,26 @@ class SpimexRepository:
         self.path_to_folder = path_to_folder
         self.page = "?page=page-{}"
 
-    async def get_range_links_process(
+    async def async_get_range_links_process(
+        self, start_page: int, end_page: int
+    ) -> List[str]:
+        if start_page < 1:
+            raise ValueError("Стартовая страница должна быть больше или равна 1")
+
+        all_links = []
+
+        tasks = []
+        for page_number in range(start_page, end_page + 1):
+            tasks.append(self._process_page(page_number))
+
+        pages_results = await asyncio.gather(*tasks)
+
+        for links in pages_results:
+            all_links.extend(links)
+
+        return all_links
+
+    async def sync_get_range_links_process(
         self,
         start_page: int,
         end_page: int,
@@ -56,6 +75,30 @@ class SpimexRepository:
                 print(f"Ошибка при обработке страницы {page_number}: {e}")
 
         return all_links
+
+    async def _process_page(self, page_number: int):
+        try:
+            html = await self._fetch_page(page_number)
+            items = await self._extract_process(
+                html=html,
+                name="a",
+                attrs={"class": "accordeon-inner__item-title link xls"},
+            )
+            dates = await self._extract_process(
+                html=html,
+                name="div",
+                attrs={"class": "accordeon-inner__item-inner__title"},
+            )
+            dates = await self._parse_for_date(dates=dates)
+            links = await self._parse_html_for_link_and_valid_date_checker(
+                items=items, dates=dates
+            )
+            print(f"Обработана страница {page_number}: найдено {len(links)} ссылок")
+            await asyncio.sleep(1)
+            return links
+        except Exception as e:
+            print(f"Ошибка при обработке страницы {page_number}: {e}")
+            return []
 
     async def get_specific_one(
         self,
