@@ -17,10 +17,10 @@ class ReadAndWriteService:
         self.path_to_folder = path_to_folder
 
     def open_and_parse_exel_files(self) -> List[Any]:
-        all_data = []  # Список для хранения данных всех файлов
+        all_data = []
         for file in self.path_to_folder.glob(pattern="*.xls"):
             df = pd.read_excel(file, header=7)
-            print(f"Обрабатываю файл: {file.name} ✅")
+            # print(f"Обрабатываю файл: {file.name} ✅")
             date = self._get_date_from_file_name(file_name=file.name)
             data = self._parse_info(df=df, date=date)
             all_data.extend(data)
@@ -38,7 +38,7 @@ class ReadAndWriteService:
                 if valid_row is not None:
                     valid_rows.append(valid_row)
             except Exception:
-                print("Ошибка при обработке строки")
+                pass
         return valid_rows
 
     def _get_valid_rows(self, row: Series, date: str) -> ParseInfoSchema | None:
@@ -70,7 +70,7 @@ class ReadAndWriteService:
                 )
                 return data
         except Exception:
-            print("Ошибка при обработке строки")
+            pass
 
     def _get_date_from_file_name(self, file_name: str) -> str:
         split_file = file_name.split("_")
