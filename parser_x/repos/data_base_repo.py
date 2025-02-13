@@ -29,6 +29,7 @@ class DataBaseRepository:
 
         except Exception as e:
             print(f"Ошибка при добавлении: {e}")
+            
 
     def sync_save_to_db(self, data: List[ParseInfoSchema]):
         try:
