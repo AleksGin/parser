@@ -19,7 +19,6 @@ from services import (
 
 async def main():
     await async_create_tables()
-    print("______АСИНХРОННАЯ ВЕРСИЯ______\n\nТаблицы успешно созданы!✅")
 
     async with ClientSession() as http_session:
         spimex_repo = SpimexRepository(
