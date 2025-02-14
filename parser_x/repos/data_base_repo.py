@@ -30,13 +30,13 @@ class DataBaseRepository:
         except Exception as e:
             print(f"Ошибка при добавлении: {e}")
 
-    async def get_last_trading_dates(self):
+    async def load_last_trading_dates(self):
         pass
 
-    async def get_dynamics(self):
+    async def load__dynamics(self):
         pass
 
-    async def get_trading_results(self):
+    async def load_trading_results(self):
         pass
 
     def sync_save_to_db(self, data: List[ParseInfoSchema]):
