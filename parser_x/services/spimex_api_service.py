@@ -10,6 +10,3 @@ class SpimexApiService:
     async def get_dynamics(self): ...
 
     async def get_trading_results(self): ...
-
-
-
