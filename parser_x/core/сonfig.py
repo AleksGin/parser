@@ -32,6 +32,7 @@ class SpimexConfig(BaseModel):
 class Config(BaseSettings):
     DB_Config: DataBaseConfig
     SPX_Config: SpimexConfig
+    AppConfig: AppRunConfig = AppRunConfig()
 
     model_config = SettingsConfigDict(
         env_file=(".env.template", ".env"),
