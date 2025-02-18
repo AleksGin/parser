@@ -1,8 +1,15 @@
-from typing import List
+from typing import (
+    List,
+    Sequence,
+)
 
 from models import SpimexTraidingResut
 from schemas import ParseInfoSchema
-from sqlalchemy import insert
+from sqlalchemy import (
+    desc,
+    insert,
+    select,
+)
 from sqlalchemy.ext.asyncio import AsyncSession
 from tools import pydantic_to_sqlalchemy
 
@@ -10,25 +17,34 @@ from tools import pydantic_to_sqlalchemy
 class DataBaseRepository:
     def __init__(
         self,
-        async_session: AsyncSession,
+        session: AsyncSession,
     ):
-        self.async_session = async_session
+        self.session = session
 
     async def async_save_to_db(self, data: List[ParseInfoSchema]):
         try:
-            if self.async_session:
+            if self.session:
                 objects = [pydantic_to_sqlalchemy(pydantic_obj=item) for item in data]
-                await self.async_session.execute(
+                await self.session.execute(
                     insert(SpimexTraidingResut), [obj.__dict__ for obj in objects]
                 )
-                await self.async_session.commit()
+                await self.session.commit()
                 print("Данные успешно добавлены в базу✅")
 
         except Exception as e:
             print(f"Ошибка при добавлении: {e}")
 
-    async def load_last_trading_dates(self):
-        pass
+    async def load_last_trading_dates(
+        self,
+        count: int,
+    ) -> Sequence[SpimexTraidingResut]:
+        stmt = (
+            select(SpimexTraidingResut)
+            .order_by(desc(SpimexTraidingResut.date))
+            .limit(count)
+        )
+        result = await self.session.scalars(stmt)
+        return result.all()
 
     async def load__dynamics(self):
         pass
