@@ -3,6 +3,7 @@ from zoneinfo import ZoneInfo
 
 from pydantic import (
     BaseModel,
+    ConfigDict,
 )
 
 MOSCOW_TZ = ZoneInfo("Europe/Moscow")
@@ -37,3 +38,5 @@ class ParseInfoSchema(BaseModel):
     @property
     def delivery_type_id_getter(self) -> str:
         return self.exchange_product_id[-1]
+
+    model_config = ConfigDict(from_attributes=True)
