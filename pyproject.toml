@@ -20,6 +20,7 @@ psycopg = "^3.2.4"
 psycopg-binary = "^3.2.4"
 fastapi = "^0.115.8"
 redis = "^5.2.1"
+uvicorn = "^0.34.0"
 
 
 [build-system]
