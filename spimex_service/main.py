@@ -1,11 +1,25 @@
-from fastapi import FastAPI
+from contextlib import asynccontextmanager
+
 import uvicorn
-from core import settings
 from api import spimex_info_router
+from core import settings
+from fastapi import FastAPI
+from fastapi.responses import ORJSONResponse
+from models import db_helper
 
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # start
+    yield
+    # shutdown
+    await db_helper.dispose()
 
-app = FastAPI()
+
+app = FastAPI(
+    lifespan=lifespan,
+    default_response_class=ORJSONResponse,
+)
 
 app.include_router(spimex_info_router)
 
