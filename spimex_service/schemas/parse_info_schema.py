@@ -4,6 +4,7 @@ from zoneinfo import ZoneInfo
 from pydantic import (
     BaseModel,
     ConfigDict,
+    computed_field,
 )
 
 MOSCOW_TZ = ZoneInfo("Europe/Moscow")
@@ -27,17 +28,23 @@ class ParseInfoSchema(BaseModel):
     created_on: str
     updated_on: str
 
-    @property
+    @computed_field
     def oil_id_getter(self) -> str:
         return self.exchange_product_id[:4]
 
-    @property
+    @computed_field
     def delivery_basis_id_getter(self) -> str:
         return self.exchange_product_id[4:7]
 
-    @property
+    @computed_field
     def delivery_type_id_getter(self) -> str:
         return self.exchange_product_id[-1]
-    
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class TradingDateSchema(BaseModel):
+    date: str
+
     model_config = ConfigDict(from_attributes=True)
 
