@@ -1,14 +1,14 @@
 from repos import SpimexBaseRepository
-from schemas import ParseInfoSchema
+from schemas import ParseInfoSchema, TradingDateSchema
 
 
 class SpimexApiService:
     def __init__(self, db_repo: SpimexBaseRepository) -> None:
         self.db_repo = db_repo
 
-    async def get_last_trading_dates(self, count: int) -> list[ParseInfoSchema]:
+    async def get_last_trading_dates(self, count: int) -> list[TradingDateSchema]:
         data = await self.db_repo.load_last_trading_dates(count)
-        parse_data = [ParseInfoSchema.model_validate(obj) for obj in data]
+        parse_data = [TradingDateSchema(date=row) for row in data]
         return parse_data
 
     async def get_dynamics(self): ...
