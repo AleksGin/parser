@@ -1,3 +1,13 @@
+from pydantic import (
+    BaseModel,
+    PostgresDsn,
+)
+from pydantic_settings import (
+    BaseSettings,
+    SettingsConfigDict,
+)
+
+
 class AppRunConfig(BaseModel):
     host: str = "0.0.0.0"
     port: int = 8000
@@ -12,6 +22,7 @@ class DataBaseConfig(BaseModel):
 
 
 class Config(BaseSettings):
+    DB_Config: DataBaseConfig
     AppConfig: AppRunConfig = AppRunConfig()
 
     model_config = SettingsConfigDict(
