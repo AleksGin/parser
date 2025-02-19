@@ -12,7 +12,7 @@ app.include_router(spimex_info_router)
 
 if __name__ == "__main__":
     uvicorn.run(
-        app="fastapi_app:app",
+        app="main:app",
         host=settings.AppConfig.host,
         port=settings.AppConfig.port,
         reload=True,

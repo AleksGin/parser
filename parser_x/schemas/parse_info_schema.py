@@ -3,7 +3,6 @@ from zoneinfo import ZoneInfo
 
 from pydantic import (
     BaseModel,
-    ConfigDict,
 )
 
 MOSCOW_TZ = ZoneInfo("Europe/Moscow")
