@@ -1,3 +1,10 @@
+from typing import Sequence
+from sqlalchemy import desc, select
+from models import SpimexTraidingResut
+from sqlalchemy.ext.asyncio import AsyncSession
+
+
+
 class SpimexBaseRepository:
     def __init__(
         self,
