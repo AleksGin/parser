@@ -10,11 +10,6 @@ from pydantic_settings import (
 )
 
 
-class AppRunConfig(BaseModel):
-    host: str = "0.0.0.0"
-    port: int = 8000
-
-
 class DataBaseConfig(BaseModel):
     url: PostgresDsn
     echo: bool = False
@@ -32,7 +27,6 @@ class SpimexConfig(BaseModel):
 class Config(BaseSettings):
     DB_Config: DataBaseConfig
     SPX_Config: SpimexConfig
-    AppConfig: AppRunConfig = AppRunConfig()
 
     model_config = SettingsConfigDict(
         env_file=(".env.template", ".env"),

@@ -3,7 +3,6 @@ from pathlib import Path
 
 from aiohttp import ClientSession
 from core import settings
-
 from models import db_helper
 from repos import (
     DataBaseRepository,
@@ -48,8 +47,8 @@ async def main():
         if data:
             print("Данные направлены✅")
             async with db_helper.get_session() as session:
-                db_repo = DataBaseRepository(async_session=session)
-                await db_repo.async_save_to_db(data)
+                db_repo = DataBaseRepository(session=session)
+                await db_repo.save_to_db(data)
 
 
 if __name__ == "__main__":
