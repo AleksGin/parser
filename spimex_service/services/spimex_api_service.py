@@ -1,9 +1,9 @@
-from repos import DataBaseRepository
+from repos import SpimexBaseRepository
 from schemas import ParseInfoSchema
 
 
 class SpimexApiService:
-    def __init__(self, db_repo: DataBaseRepository) -> None:
+    def __init__(self, db_repo: SpimexBaseRepository) -> None:
         self.db_repo = db_repo
 
     async def get_last_trading_dates(self, count: int) -> list[ParseInfoSchema]:
