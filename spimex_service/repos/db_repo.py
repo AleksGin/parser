@@ -1,8 +1,6 @@
-from typing import Sequence
-from sqlalchemy import desc, select
-from models import SpimexTraidingResut
+from models import SpimexTradingResut
+from sqlalchemy import desc, distinct, select
 from sqlalchemy.ext.asyncio import AsyncSession
-
 
 
 class SpimexBaseRepository:
@@ -15,17 +13,21 @@ class SpimexBaseRepository:
     async def load_last_trading_dates(
         self,
         count: int,
-    ) -> Sequence[SpimexTraidingResut]:
+    ) -> list[str]:
         stmt = (
-            select(SpimexTraidingResut)
-            .order_by(desc(SpimexTraidingResut.date))
+            select(distinct(SpimexTradingResut.date))
+            .order_by(desc(SpimexTradingResut.date))
             .limit(count)
         )
         result = await self.session.scalars(stmt)
-        return result.all()
 
-    async def load__dynamics(self):
-        pass
+        return list(result.all())
+
+    # async def load__dynamics(self, start_date: str, end_date: str) -> Sequence[SpimexBaseRepository]:
+    #     stmt = (
+    #         select(SpimexBaseRepository)
+    #         .or
+    #     )
 
     async def load_trading_results(self):
         pass
