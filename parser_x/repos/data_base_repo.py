@@ -2,7 +2,7 @@ from typing import (
     List,
 )
 
-from models import SpimexTraidingResut
+from models import SpimexTradingResut
 from schemas import ParseInfoSchema
 from sqlalchemy import insert
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -21,7 +21,7 @@ class DataBaseRepository:
             if self.session:
                 objects = [pydantic_to_sqlalchemy(pydantic_obj=item) for item in data]
                 await self.session.execute(
-                    insert(SpimexTraidingResut), [obj.__dict__ for obj in objects]
+                    insert(SpimexTradingResut), [obj.__dict__ for obj in objects]
                 )
                 await self.session.commit()
                 print("Данные успешно добавлены в базу✅")

@@ -11,7 +11,7 @@ from sqlalchemy.orm import (
 from .base import Base
 
 
-class SpimexTraidingResut(Base):
+class SpimexTradingResut(Base):
     __tablename__ = "spimex_trading_results"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
