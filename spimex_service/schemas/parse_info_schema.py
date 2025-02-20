@@ -45,6 +45,20 @@ class ParseInfoSchema(BaseModel):
 
 class TradingDateSchema(BaseModel):
     date: str
+    total_trade_count: int
+
+    model_config = {
+        "json_schema_extra": {
+            "example": {
+                "date": "DD-MM-YYYY",
+                "total_trade_count": 999,
+            }
+        }
+    }
+
+
+class DynamicsDataSchema(TradingDateSchema):
+    total_volumes: int
+    total_trade_sum: int
 
     model_config = ConfigDict(from_attributes=True)
-
