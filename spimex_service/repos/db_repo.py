@@ -2,6 +2,7 @@ from typing import Sequence, Tuple
 from sqlalchemy.engine.row import Row
 from models import SpimexTradingResut
 from sqlalchemy import (
+    Result,
     desc,
     select,
     func,
@@ -23,7 +24,7 @@ class SpimexBaseRepository:
         stmt = (
             select(
                 SpimexTradingResut.date,
-                func.count(SpimexTradingResut.id).label("count"),
+                func.count(SpimexTradingResut.id).label("total_trade_count"),
             )
             .group_by(SpimexTradingResut.date)
             .order_by(desc(SpimexTradingResut.date))
@@ -33,14 +34,33 @@ class SpimexBaseRepository:
 
         return result.all()
 
-    async def load__dynamics(
+    async def load_dynamics(
         self,
         start_date: str,
         end_date: str,
-        oil_id: str | None = None,
-        delivery_type_id: str | None = None,
-        delivery_basis_id: str | None = None,
-    ): ...
+        oil_id: str,
+        type_id: str,
+        basis_id: str,
+    ) -> Result[Tuple]:
+        stmt = (
+            select(
+                SpimexTradingResut.date,
+                func.sum(SpimexTradingResut.volume).label("total_volumes"),
+                func.sum(SpimexTradingResut.count).label("total_trade_count"),
+                func.sum(SpimexTradingResut.total).label("total_trade_sum"),
+            )
+            .where(
+                SpimexTradingResut.oil_id == oil_id,
+                SpimexTradingResut.delivery_type_id == type_id,
+                SpimexTradingResut.delivery_basis_id == basis_id,
+                SpimexTradingResut.date.between(start_date, end_date),
+            )
+            .group_by(SpimexTradingResut.date)
+            .order_by(SpimexTradingResut.date.desc())
+        )
+
+        data = await self.session.execute(stmt)
+        return data
 
     async def load_trading_results(self):
         pass
