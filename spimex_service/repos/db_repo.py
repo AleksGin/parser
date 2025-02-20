@@ -1,5 +1,11 @@
+from typing import Sequence, Tuple
+from sqlalchemy.engine.row import Row
 from models import SpimexTradingResut
-from sqlalchemy import desc, distinct, select
+from sqlalchemy import (
+    desc,
+    select,
+    func,
+)
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
@@ -13,21 +19,28 @@ class SpimexBaseRepository:
     async def load_last_trading_dates(
         self,
         count: int,
-    ) -> list[str]:
+    ) -> Sequence[Row[Tuple[str, int]]]:
         stmt = (
-            select(distinct(SpimexTradingResut.date))
+            select(
+                SpimexTradingResut.date,
+                func.count(SpimexTradingResut.id).label("count"),
+            )
+            .group_by(SpimexTradingResut.date)
             .order_by(desc(SpimexTradingResut.date))
             .limit(count)
         )
-        result = await self.session.scalars(stmt)
+        result = await self.session.execute(stmt)
 
-        return list(result.all())
+        return result.all()
 
-    # async def load__dynamics(self, start_date: str, end_date: str) -> Sequence[SpimexBaseRepository]:
-    #     stmt = (
-    #         select(SpimexBaseRepository)
-    #         .or
-    #     )
+    async def load__dynamics(
+        self,
+        start_date: str,
+        end_date: str,
+        oil_id: str | None = None,
+        delivery_type_id: str | None = None,
+        delivery_basis_id: str | None = None,
+    ): ...
 
     async def load_trading_results(self):
         pass
