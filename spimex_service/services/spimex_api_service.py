@@ -1,5 +1,5 @@
 from repos import SpimexBaseRepository
-from schemas import ParseInfoSchema, TradingDateSchema
+from schemas import TradingDateSchema
 
 
 class SpimexApiService:
@@ -8,7 +8,7 @@ class SpimexApiService:
 
     async def get_last_trading_dates(self, count: int) -> list[TradingDateSchema]:
         data = await self.db_repo.load_last_trading_dates(count)
-        parse_data = [TradingDateSchema(date=row) for row in data]
+        parse_data = [TradingDateSchema(date=row[0], total_trade_count=row[1]) for row in data]
         return parse_data
 
     async def get_dynamics(self): ...
