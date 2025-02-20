@@ -15,7 +15,10 @@ from .dependencies import get_spimex_service
 router = APIRouter(tags=["SpimexInfo"], prefix="/spimex_api_v1")
 
 
-@router.get("/last_trading_dates", response_model=list[TradingDateSchema])
+@router.get(
+    "/last_trading_dates",
+    response_model=list[TradingDateSchema],
+)
 async def last_trading_dates(
     spimex_service: Annotated[
         SpimexApiService,
@@ -27,7 +30,10 @@ async def last_trading_dates(
     return last_trading_dates
 
 
-@router.get("/dynamics_data", response_model=list[DynamicsDataSchema])
+@router.get(
+    "/dynamics_data",
+    response_model=list[DynamicsDataSchema],
+)
 async def dynamics_data(
     spimex_service: Annotated[
         SpimexApiService,
@@ -36,6 +42,14 @@ async def dynamics_data(
     start_date: str,
     end_date: str,
     oil_id: str,
-    delivery_typle_id: str,
-    delivery_basis_id: str,
-): ...
+    type_id: str,
+    basis_id: str,
+) -> list[DynamicsDataSchema]:
+    dynamics_data = await spimex_service.get_dynamics(
+        start_date=start_date,
+        end_date=end_date,
+        oil_id=oil_id,
+        type_id=type_id,
+        basis_id=basis_id,
+    )
+    return dynamics_data
