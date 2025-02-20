@@ -4,10 +4,7 @@ from fastapi import (
     APIRouter,
     Depends,
 )
-from schemas import (
-    TradingDateSchema,
-    ParseInfoSchema,
-)
+from schemas import TradingDateSchema
 from services import SpimexApiService
 
 from .dependencies import get_spimex_service
