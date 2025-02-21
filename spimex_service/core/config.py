@@ -21,9 +21,15 @@ class DataBaseConfig(BaseModel):
     pool_size: int = 50
 
 
+class CacheConfig(BaseModel):
+    password: str
+    url: str
+
+
 class Config(BaseSettings):
     DB_Config: DataBaseConfig
     AppConfig: AppRunConfig = AppRunConfig()
+    CacheConfig: CacheConfig
 
     model_config = SettingsConfigDict(
         env_file=(".env.template", ".env"),
