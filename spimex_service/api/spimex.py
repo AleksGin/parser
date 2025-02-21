@@ -53,3 +53,21 @@ async def dynamics_data(
         basis_id=basis_id,
     )
     return dynamics_data
+
+
+@router.get("last_trades_data", response_model=DynamicsDataSchema)
+async def last_trades_data(
+    spimex_service: Annotated[
+        SpimexApiService,
+        Depends(get_spimex_service),
+    ],
+    oil_id: str,
+    type_id: str,
+    basis_id: str,
+) -> DynamicsDataSchema:
+    data = await spimex_service.get_trading_results(
+        oil_id=oil_id,
+        type_id=type_id,
+        basis_id=basis_id,
+    )
+    return data
