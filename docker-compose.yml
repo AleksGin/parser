@@ -1,0 +1,19 @@
+services:
+  redis: 
+    image: redis:7.4.1-alpine
+    container_name: spimex_cache
+    restart: always
+    environment:
+      - CACHE_CONFIG__PASSWORD=${CACHE_CONFIG__PASSWORD}
+    volumes:
+      - redis-data:/data
+    command: ["redis-server", "--requirepass", "${CACHE_CONFIG__PASSWORD}"]
+    networks:
+      - spimex_local
+
+networks:
+  spimex_local:
+    driver: bridge
+
+volumes:
+  redis-data: 
