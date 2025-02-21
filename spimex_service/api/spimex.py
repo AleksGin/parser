@@ -55,7 +55,7 @@ async def dynamics_data(
     return dynamics_data
 
 
-@router.get("last_trades_data", response_model=DynamicsDataSchema)
+@router.get("/last_trades_data", response_model=DynamicsDataSchema)
 async def last_trades_data(
     spimex_service: Annotated[
         SpimexApiService,
