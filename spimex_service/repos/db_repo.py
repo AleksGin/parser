@@ -1,12 +1,16 @@
-from typing import Sequence, Tuple
-from sqlalchemy.engine.row import Row
+from typing import (
+    Sequence,
+    Tuple,
+)
+
 from models import SpimexTradingResut
 from sqlalchemy import (
     Result,
     desc,
-    select,
     func,
+    select,
 )
+from sqlalchemy.engine.row import Row, RowMapping
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
@@ -62,5 +66,29 @@ class SpimexBaseRepository:
         data = await self.session.execute(stmt)
         return data
 
-    async def load_trading_results(self):
-        pass
+    async def load_last_trading_results(
+        self,
+        oil_id: str,
+        type_id: str,
+        basis_id: str,
+    ) -> Sequence[RowMapping]:
+        stmt = (
+            select(
+                SpimexTradingResut.date,
+                func.sum(SpimexTradingResut.volume).label("total_volumes"),
+                func.sum(SpimexTradingResut.count).label("total_trade_count"),
+                func.sum(SpimexTradingResut.total).label("total_trade_sum"),
+            )
+            .where(
+                SpimexTradingResut.oil_id == oil_id,
+                SpimexTradingResut.delivery_type_id == type_id,
+                SpimexTradingResut.delivery_basis_id == basis_id,
+            )
+            .group_by(SpimexTradingResut.date)
+            .having(
+                SpimexTradingResut.date
+                == select(func.max(SpimexTradingResut.date)).scalar_subquery()
+            )
+        )
+        data = await self.session.execute(stmt)
+        return data.mappings().all()
