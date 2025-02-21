@@ -37,4 +37,17 @@ class SpimexApiService:
         result = [DynamicsDataSchema.model_validate(row) for row in data]
         return result
 
-    async def get_trading_results(self): ...
+    async def get_trading_results(
+        self,
+        oil_id: str,
+        type_id: str,
+        basis_id: str,
+    ) -> DynamicsDataSchema:
+        data = await self.db_repo.load_last_trading_results(
+            oil_id=oil_id,
+            type_id=type_id,
+            basis_id=basis_id,
+        )
+
+        parse_data = DynamicsDataSchema.model_validate(*data)
+        return parse_data
