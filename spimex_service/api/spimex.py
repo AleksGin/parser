@@ -5,8 +5,8 @@ from fastapi import (
     Depends,
 )
 from schemas import (
-    TradingDateSchema,
     DynamicsDataSchema,
+    TradingDateSchema,
 )
 from services import SpimexApiService
 
@@ -55,7 +55,7 @@ async def dynamics_data(
     return dynamics_data
 
 
-@router.get("/last_trades_data", response_model=DynamicsDataSchema)
+@router.get("/last_trades_data", response_model=list[DynamicsDataSchema])
 async def last_trades_data(
     spimex_service: Annotated[
         SpimexApiService,
@@ -64,7 +64,7 @@ async def last_trades_data(
     oil_id: str,
     type_id: str,
     basis_id: str,
-) -> DynamicsDataSchema:
+) -> list[DynamicsDataSchema]:
     data = await spimex_service.get_trading_results(
         oil_id=oil_id,
         type_id=type_id,
