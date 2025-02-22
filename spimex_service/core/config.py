@@ -1,6 +1,7 @@
 from pydantic import (
     BaseModel,
     PostgresDsn,
+    RedisDsn,
 )
 from pydantic_settings import (
     BaseSettings,
@@ -23,13 +24,13 @@ class DataBaseConfig(BaseModel):
 
 class CacheConfig(BaseModel):
     password: str
-    url: str
+    url: RedisDsn
 
 
 class Config(BaseSettings):
     DB_Config: DataBaseConfig
     AppConfig: AppRunConfig = AppRunConfig()
-    CacheConfig: CacheConfig
+    Redis_Config: CacheConfig
 
     model_config = SettingsConfigDict(
         env_file=(".env.template", ".env"),
