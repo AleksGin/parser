@@ -45,7 +45,7 @@ class SpimexBaseRepository:
         oil_id: str,
         type_id: str,
         basis_id: str,
-    ) -> Result[Tuple]:
+    ) -> Sequence[RowMapping]:
         stmt = (
             select(
                 SpimexTradingResut.date,
@@ -64,7 +64,7 @@ class SpimexBaseRepository:
         )
 
         data = await self.session.execute(stmt)
-        return data
+        return data.mappings().all()
 
     async def load_last_trading_results(
         self,
