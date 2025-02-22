@@ -4,12 +4,14 @@ services:
     container_name: spimex_cache
     restart: always
     environment:
-      - CACHE_CONFIG__PASSWORD=${CACHE_CONFIG__PASSWORD}
+      - REDIS_CONFIG__PASSWORD=${REDIS_CONFIG__PASSWORD}
     volumes:
       - redis-data:/data
-    command: ["redis-server", "--requirepass", "${CACHE_CONFIG__PASSWORD}"]
+    command: ["redis-server", "--requirepass", "${REDIS_CONFIG__PASSWORD}"]
     networks:
       - spimex_local
+    ports:
+      - "6379:6379"
 
 networks:
   spimex_local:
