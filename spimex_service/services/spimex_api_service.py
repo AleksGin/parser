@@ -1,6 +1,5 @@
 import json
 
-from pydantic import BaseModel
 from repos import (
     CacheRepository,
     SpimexBaseRepository,
@@ -117,7 +116,7 @@ class SpimexApiService:
             value=serialized_value,
         )
 
-    async def _check_in_cache(self, key: str, schema: BaseModel):
+    async def _check_in_cache(self, key: str, schema):
         cached_data = await self.cache_repo.get_request_info(key=key)
         if cached_data:
             return [schema(**item) for item in json.loads(cached_data)]
